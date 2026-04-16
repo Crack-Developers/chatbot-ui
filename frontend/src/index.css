@@ -1,0 +1,136 @@
+/* Global Design System Variables */
+:root {
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+  /* Color Palette - Premium Dark Theme heavily drawn from NotebookLM aesthetics */
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-tertiary: #2a2a2a;
+  --bg-glass: rgba(30, 30, 30, 0.6);
+  --bg-accent: #eef2ff;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-inverse: #121212;
+  --text-accent: #6ee7b7; /* Subtle teal/emerald accent for premium feel */
+
+  --border-color: #333;
+  --border-focus: #4ade80;
+
+  --btn-primary-bg: #ffffff;
+  --btn-primary-hover: #e0e0e0;
+  --btn-primary-text: #121212;
+  
+  --btn-secondary-bg: #2a2a2a;
+  --btn-secondary-hover: #3a3a3a;
+  --btn-secondary-text: #ffffff;
+
+  /* Typography */
+  --h1-size: 2.5rem;
+  --h2-size: 1.8rem;
+  --p-size: 1rem;
+  --small-size: 0.85rem;
+
+  /* Spacing */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.3s ease;
+  --base-radius: 12px;
+  --pill-radius: 9999px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+input, button, select {
+  font-family: var(--font-family);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--base-radius);
+}
+
+/* Common form elements */
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input-field:focus {
+  border-color: var(--border-focus);
+}
+
+.btn-primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--pill-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border: 1px solid var(--border-color);
+  padding: 12px 24px;
+  border-radius: var(--pill-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background-color: var(--btn-secondary-hover);
+}
+
+/* Page container */
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

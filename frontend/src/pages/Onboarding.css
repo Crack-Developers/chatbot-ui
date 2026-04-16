@@ -1,0 +1,134 @@
+.onboarding-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at bottom left, #0e1628, #121212);
+}
+
+.onboarding-box {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+.onboarding-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--bg-tertiary);
+  transition: background-color var(--transition-med);
+}
+
+.progress-dot.active {
+  background-color: var(--text-accent);
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
+}
+
+.progress-line {
+  height: 2px;
+  width: 40px;
+  background-color: var(--bg-tertiary);
+  margin: 0 10px;
+}
+
+.step-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.step-icon {
+  color: var(--text-accent);
+  margin-bottom: 16px;
+}
+
+.step-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.card-grid {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.subjects-grid {
+  flex-wrap: wrap;
+}
+
+.choice-card {
+  flex: 1;
+  min-width: 150px;
+  background-color: var(--bg-tertiary);
+  border: 2px solid transparent;
+  border-radius: var(--base-radius);
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.choice-card:hover {
+  background-color: var(--bg-secondary);
+  transform: translateY(-4px);
+}
+
+.choice-card.selected {
+  border-color: var(--text-accent);
+  background-color: rgba(110, 231, 183, 0.05);
+}
+
+.choice-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.choice-card p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.onboarding-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
