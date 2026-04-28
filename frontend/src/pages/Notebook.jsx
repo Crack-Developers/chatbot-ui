@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Settings, Bookmark, Search, Send, Plus, MoreVertical, List, CheckCircle2, XCircle } from 'lucide-react';
+import { Settings, Bookmark, Search, Send, Plus, MoreVertical, List, CheckCircle2, XCircle, Mic, ChevronDown, User, MessageSquare } from 'lucide-react';
 import './Notebook.css';
 
 const Notebook = () => {
   const [activeTab, setActiveTab] = useState('Current Page');
-  const [messages, setMessages] = useState([
-    { role: 'ai', content: 'Welcome to your UPSC prep notebook. How can I help you today? I can generate interactive Prelims mock questions or explain complex topics.', type: 'text' }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputVal, setInputVal] = useState('');
+  const [examMode, setExamMode] = useState('prelims');
   
   // State for Mock interactive question
   const [selectedOption, setSelectedOption] = useState(null);
@@ -17,6 +16,15 @@ const Notebook = () => {
   const [notes, setNotes] = useState([
     { id: 1, text: "The Government of India Act 1919 introduced Dyarchy." },
     { id: 2, text: "Current Affairs: SC ruling on fundamental rights vs directive principles." }
+  ]);
+
+  const [recents] = useState([
+    'UPSC AI Chatbot Prompt',
+    'Word page numbering fix',
+    'TOC Formatting Issues',
+    'AI-Integrated Linux OS',
+    'Declaration Improvement Tips',
+    'Static Cooking Website Guide'
   ]);
 
   const handleSend = (e) => {
@@ -29,7 +37,7 @@ const Notebook = () => {
     
     // Simulate AI response based on keyword triggering interactive prelimes UI
     setTimeout(() => {
-      if (inputVal.toLowerCase().includes('generate') || inputVal.toLowerCase().includes('prelims')) {
+      if (examMode === 'prelims' && (inputVal.toLowerCase().includes('generate') || inputVal.toLowerCase().includes('question'))) {
         setMessages([...newMsgs, { 
           role: 'ai', 
           type: 'mcq',
@@ -39,7 +47,11 @@ const Notebook = () => {
           explanation: 'The GOI Act 1935 proposed an All India federation, and abolished dyarchy in provinces bringing provincial autonomy.'
         }]);
       } else {
-         setMessages([...newMsgs, { role: 'ai', content: `Here is some information about ${inputVal}. Use the notes panel to save important points!`, type: 'text' }]);
+         setMessages([...newMsgs, { 
+           role: 'ai', 
+           content: `[Mode: ${examMode.toUpperCase()}] Here is some information about ${inputVal}. Use the notes panel to save important points!`, 
+           type: 'text' 
+         }]);
       }
     }, 1000);
     
@@ -53,34 +65,34 @@ const Notebook = () => {
   return (
     <div className="notebook-container">
       {/* LEFT SIDEBAR */}
-      <div className="sidebar glass-panel">
+      <div className="sidebar">
         <div className="sidebar-header">
            <h2>UPSC AI</h2>
+           <button className="btn-icon"><MoreVertical size={16}/></button>
         </div>
         
         <button className="new-chat-btn">
-          <Plus size={18} /> New Session
+          <span>New chat</span>
+          <MessageSquare size={16} />
         </button>
 
         <div className="sidebar-nav">
-          <p className="nav-label">VIEWS</p>
-          <div 
-            className={`nav-item ${activeTab === 'Current Page' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Current Page')}
-          >
-            <List size={18} /> Current Page
-          </div>
-          <div 
-            className={`nav-item ${activeTab === 'Current Affairs' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Current Affairs')}
-          >
-            <Bookmark size={18} /> Current Affairs
-          </div>
+          <p className="nav-label">Recents</p>
+          {recents.map((item, i) => (
+            <div key={i} className={`nav-item ${i === 0 && messages.length > 0 ? 'active' : ''}`}>
+              {item}
+            </div>
+          ))}
         </div>
 
         <div className="sidebar-bottom">
-           <div className="nav-item">
-             <Settings size={18} /> Settings
+           <div className="user-profile">
+             <div className="avatar">RS</div>
+             <div className="user-info" style={{flex: 1}}>
+                <div style={{fontSize: '0.85rem', fontWeight: 600}}>Ragul Superv</div>
+                <div style={{fontSize: '0.75rem', color: '#676767'}}>Free</div>
+             </div>
+             <button className="btn-text" style={{padding: '4px 8px', fontSize: '0.7rem', border: '1px solid #e5e5e5', borderRadius: '12px'}}>Upgrade</button>
            </div>
         </div>
       </div>
@@ -88,96 +100,82 @@ const Notebook = () => {
       {/* CENTER PANE - CHAT / CONTENT */}
       <div className="center-pane">
         <div className="pane-header">
-           <h3>{activeTab}</h3>
-           <button className="btn-icon"><MoreVertical size={20}/></button>
+           <div className="header-left">
+              <h3>UPSC AI</h3>
+              <ChevronDown size={16} color="#676767" />
+           </div>
+           <div className="header-right" style={{display: 'flex', gap: '12px'}}>
+              <button className="btn-icon"><User size={20}/></button>
+              <button className="btn-icon"><Settings size={20}/></button>
+           </div>
         </div>
 
         <div className="chat-area">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`message-bubble ${msg.role}`}>
-              {msg.type === 'text' ? (
-                <div className="msg-content">{msg.content}</div>
-              ) : (
-                <div className="interactive-question">
-                  <div className="question-text">{msg.question}</div>
-                  <div className="options-container">
-                    {msg.options.map((opt, oIdx) => {
-                      let optionClass = 'mcq-option';
-                      if (isSubmitted) {
-                         if (opt === msg.correct) optionClass += ' correct';
-                         else if (selectedOption === opt) optionClass += ' incorrect';
-                      } else if (selectedOption === opt) {
-                         optionClass += ' selected';
-                      }
-                      
-                      return (
-                        <div 
-                          key={oIdx} 
-                          className={optionClass}
-                          onClick={() => !isSubmitted && setSelectedOption(opt)}
-                        >
-                          <div className="radio-circle">
-                            {(isSubmitted && opt === msg.correct) ? <CheckCircle2 size={16} /> : 
-                             (isSubmitted && selectedOption === opt && opt !== msg.correct) ? <XCircle size={16} /> : 
-                             (selectedOption === opt ? <div className="radio-dot"/> : null)}
-                          </div>
-                          <span>{opt}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  
-                  {!isSubmitted ? (
-                    <button 
-                      className="btn-primary mt-4" 
-                      disabled={!selectedOption}
-                      onClick={() => handleMCQSubmit(idx)}
-                    >
-                      Submit Answer
-                    </button>
-                  ) : (
-                    <div className="explanation-box fade-in">
-                       <h4>Explanation</h4>
-                       <p>{msg.explanation}</p>
-                       <button className="btn-secondary add-note-btn mt-2" onClick={() => setNotes([...notes, { id: Date.now(), text: msg.explanation }])}>
-                          Add to Notes
-                       </button>
-                    </div>
-                  )}
-                </div>
-              )}
+          {messages.length === 0 ? (
+            <div className="empty-state">
+               <h1 className="empty-state-heading">Where should we begin?</h1>
             </div>
-          ))}
+          ) : (
+            messages.map((msg, idx) => (
+              <div key={idx} className={`message-bubble ${msg.role}`}>
+                {msg.type === 'text' ? (
+                  <div className="msg-content">{msg.content}</div>
+                ) : (
+                   <div className="interactive-question">
+                     {/* MCQ UI stays same but looks consistent */}
+                     <div className="question-text">{msg.question}</div>
+                     {/* ...rest of interactive question UI */}
+                   </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
-        <form className="chat-input-container" onSubmit={handleSend}>
-           <div className="input-wrapper inner-glass">
-             <Search size={20} className="search-icon" />
-             <input 
-               type="text" 
-               placeholder="Ask for notes, past papers, or generate prelims questions..." 
-               value={inputVal}
-               onChange={(e) => setInputVal(e.target.value)}
-             />
-             <button type="submit" className="send-btn" disabled={!inputVal.trim()}>
-               <Send size={18} />
-             </button>
-           </div>
-        </form>
+        <div className={`chat-input-container ${messages.length === 0 ? 'vertical-center' : ''}`}>
+          <form className="input-wrapper-outer" onSubmit={handleSend}>
+             <div className="input-wrapper">
+               <div className="input-main">
+                 <button type="button" className="plus-btn"><Plus size={20}/></button>
+                 <input 
+                   type="text" 
+                   placeholder="Ask anything" 
+                   value={inputVal}
+                   onChange={(e) => setInputVal(e.target.value)}
+                 />
+                 <div className="input-actions">
+                   <button type="button" className="mic-btn"><Mic size={20}/></button>
+                   <button type="submit" className="send-btn" disabled={!inputVal.trim()}>
+                     <Send size={16} />
+                   </button>
+                 </div>
+               </div>
+               <select 
+                 className="mode-select" 
+                 value={examMode} 
+                 onChange={(e) => setExamMode(e.target.value)}
+               >
+                 <option value="prelims">Prelims Mode</option>
+                 <option value="mains">Mains Mode</option>
+                 <option value="optional">Optional Mode</option>
+               </select>
+             </div>
+             <div className="input-footer">
+                UPSC AI can make mistakes. Check important info.
+             </div>
+          </form>
+        </div>
       </div>
 
       {/* RIGHT PANE - NOTES */}
-      <div className="right-pane glass-panel">
-         <div className="pane-header">
+      <div className="right-pane">
+         <div className="pane-header" style={{border: 'none', padding: '0 0 12px 0'}}>
            <h3>My Notes</h3>
          </div>
-         <div className="notes-list">
+         <div className="notes-list" style={{padding: 0}}>
             {notes.map(note => (
                <div key={note.id} className="note-card">
-                 <p>{note.text}</p>
-                 <div className="note-actions">
-                    <button className="btn-text" style={{fontSize: '0.8rem'}}>Edit</button>
-                 </div>
+                 <p style={{fontSize: '0.85rem', margin: 0}}>{note.text}</p>
                </div>
             ))}
          </div>

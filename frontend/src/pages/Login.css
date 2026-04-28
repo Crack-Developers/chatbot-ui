@@ -2,22 +2,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top right, #1a202c, #0d1117);
+  background-color: var(--bg-main);
+  transition: background-color 0.3s;
 }
 
 .login-box {
   width: 100%;
   max-width: 440px;
-  padding: 40px;
+  padding: 48px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  gap: 32px;
+  background-color: var(--bg-card);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s;
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 10px;
 }
 
 .logo-icon {
@@ -26,19 +30,21 @@
 }
 
 .login-header h1 {
-  font-size: 1.5rem;
-  margin-bottom: 8px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
 }
 
 .login-header p {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .input-group {
@@ -49,12 +55,24 @@
 
 .input-icon {
   position: absolute;
-  left: 14px;
+  left: 16px;
   color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .input-group .input-field {
-  padding-left: 44px;
+  padding: 14px 16px 14px 48px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: all 0.2s;
+}
+
+.input-group .input-field:focus {
+  border-color: #000000;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
 }
 
 .full-width {
@@ -62,29 +80,21 @@
 }
 
 .mt-4 {
-  margin-top: 16px;
-}
-
-.mt-2 {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .otp-display {
   text-align: center;
-  margin-bottom: 16px;
-}
-
-.otp-display p {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 16px;
 }
 
 .otp-input {
   text-align: center;
   font-size: 2rem;
-  letter-spacing: 0.5rem;
-  padding: 12px;
+  letter-spacing: 0.8rem;
+  padding: 16px;
+  background-color: var(--bg-tertiary) !important;
+  border: none !important;
+  border-radius: 16px !important;
 }
 
 .btn-text {
@@ -93,9 +103,12 @@
   color: var(--text-secondary);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: color var(--transition-fast);
+  margin-top: 16px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .btn-text:hover {
   color: var(--text-primary);
 }
+

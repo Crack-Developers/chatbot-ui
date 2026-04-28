@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Phone, Mail, User } from 'lucide-react';
+import Logo from '../components/Logo';
 import './Login.css';
 
 const Login = () => {
@@ -37,10 +38,9 @@ const Login = () => {
   return (
     <div className="page-container login-page">
       <div className="login-box glass-panel">
-        <div className="login-header">
-          <BookOpen className="logo-icon" size={40} />
-          <h1>UPSC AI Notebook</h1>
-          <p>{step === 1 ? 'Create an account to start your preparation' : 'Verify your phone number'}</p>
+        <div className="login-header flex flex-col items-center">
+          <Logo showText={true} />
+          <p className="mt-4">{step === 1 ? 'Create an account to start your preparation' : 'Verify your phone number'}</p>
         </div>
 
         {step === 1 ? (
