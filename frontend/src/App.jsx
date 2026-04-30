@@ -1,15 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import { AppProvider } from './context/AppContext';
+import Login from './pages/Login';
+import Onboarding from './pages/Onboarding';
+import { AppProvider, useApp } from './context/AppContext';
+
+const AppRoutes = () => {
+  const { isLoggedIn } = useApp();
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <Login />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/home" element={isLoggedIn ? <Home /> : <Navigate to="/" />} />
+        <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/"} />} />
+      </Routes>
+    </Router>
+  );
+};
 
 function App() {
   return (
     <AppProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Router>
+      <AppRoutes />
     </AppProvider>
   );
 }

@@ -41,8 +41,8 @@ const Dashboard = () => {
       </div>
 
       <div className="mb-12">
-        <h2 className="text-3xl font-extrabold text-white mb-2">Welcome Back, Aspirant!</h2>
-        <p className="text-gray-400 max-w-2xl">Your AI-powered mentor is ready to help you crack UPSC. Start by asking a doubt or picking a curated topic below.</p>
+        <h2 className="text-3xl font-extrabold text-[var(--text-main)] mb-2">Welcome Back, Aspirant!</h2>
+        <p className="text-[var(--text-muted)] max-w-2xl">Your AI-powered mentor is ready to help you crack UPSC. Start by asking a doubt or picking a curated topic below.</p>
       </div>
 
       {/* Stats / Quick Info */}
@@ -52,20 +52,20 @@ const Dashboard = () => {
           { label: 'Language', value: 'English / Hindi', icon: Globe2, color: 'bg-green-500/10 text-green-400' },
           { label: 'Course Progress', value: '42% Completed', icon: BookOpen, color: 'bg-purple-500/10 text-purple-400' },
         ].map((stat, i) => (
-          <div key={i} className="bg-upsc-card border border-upsc-navy/30 p-6 flex items-center gap-4 rounded-3xl shadow-xl">
+          <div key={i} className="bg-[var(--bg-card)] border border-upsc-navy/10 p-6 flex items-center gap-4 rounded-3xl shadow-lg transition-colors">
             <div className={`p-3 rounded-2xl ${stat.color}`}>
               <stat.icon size={24} />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">{stat.label}</p>
-              <p className="text-lg font-bold text-main">{stat.value}</p>
+              <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">{stat.label}</p>
+              <p className="text-lg font-bold text-[var(--text-main)]">{stat.value}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Grid */}
-      <h3 className="text-xl font-bold text-upsc-navy dark:text-white mb-6 flex items-center gap-2">
+      <h3 className="text-xl font-bold text-upsc-navy mb-6 flex items-center gap-2">
         <ChevronRight className="text-upsc-gold" /> Suggested for you
       </h3>
       
@@ -80,7 +80,7 @@ const Dashboard = () => {
             key={q.id}
             variants={item}
             onClick={() => handleCardClick(q.title)}
-            className="group cursor-pointer bg-upsc-card border border-[var(--border-color)] p-8 border-l-8 hover:translate-x-1 rounded-3xl shadow-xl transition-colors"
+            className="group cursor-pointer bg-[var(--bg-card)] border border-[var(--border-color)] p-8 border-l-8 hover:translate-x-1 rounded-3xl shadow-lg transition-all"
             style={{ 
               borderLeftColor: q.color === 'orange' ? '#D4AF37' : q.color === 'blue' ? '#3b82f6' : '#10b981' 
             }}
@@ -93,11 +93,11 @@ const Dashboard = () => {
                 >
                   {q.category}
                 </span>
-                <h4 className="text-lg font-bold text-upsc-navy dark:text-white group-hover:text-upsc-gold transition-colors leading-tight">
+                <h4 className="text-lg font-bold text-upsc-navy group-hover:text-upsc-gold transition-colors leading-tight">
                   {q.title}
                 </h4>
               </div>
-              <div className="p-2 bg-gray-800 rounded-full group-hover:bg-upsc-gold group-hover:text-black transition-all transform group-hover:rotate-45">
+              <div className="p-2 bg-gray-100 text-upsc-navy rounded-full group-hover:bg-upsc-gold group-hover:text-white transition-all transform group-hover:rotate-45">
                 <ChevronRight size={20} />
               </div>
             </div>

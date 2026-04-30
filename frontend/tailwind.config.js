@@ -12,15 +12,15 @@ export default {
       colors: {
         upsc: {
           navy: '#2B3990',
-          gold: '#D4AF37',
+          gold: '#B89456',
           maroon: '#8B0000',
-          dark: '#080c16',
-          card: '#0D1221',
-          main: '#050810',
+          dark: '#F1F5F9',
+          card: '#FFFFFF',
+          main: '#FFFFFF',
         },
         text: {
-          main: '#F8FAFC',
-          muted: '#94A3B8',
+          main: '#0F172A',
+          muted: '#64748B',
         }
       }
     },

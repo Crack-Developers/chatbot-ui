@@ -6,17 +6,20 @@
 
 :root {
   --upsc-navy: #2B3990;
-  --upsc-gold: #D4AF37;
+  --upsc-gold: #B89456;
   --upsc-maroon: #8B0000;
-  
-  /* Permanent Academy Dark Theme */
-  --bg-main: #050810;
-  --bg-dark: #080c16;
-  --bg-card: #0D1221;
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --border-color: rgba(212, 175, 55, 0.2);
-  --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+
+  /* Elegant Light Theme */
+  --bg-main: #FFFFFF;
+  --bg-dark: #F8FAFC;
+  --bg-card: #F1F5F9;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  /* Significantly more visible borders */
+  --border-color: #CBD5E1; 
+  --border-strong: #94A3B8;
+  --bg-card: #F8FAFC;
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 body {
@@ -29,19 +32,21 @@ body {
 
 @layer components {
   .glass-card {
-    @apply bg-upsc-card bg-opacity-80 backdrop-blur-md border border-upsc-navy border-opacity-20 rounded-3xl shadow-2xl transition-all duration-300;
+    @apply bg-white bg-opacity-90 backdrop-blur-md border border-gray-200 rounded-3xl shadow-xl transition-all duration-300;
   }
-  
+
   .sidebar-item {
-    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer text-gray-400 hover:text-white;
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer text-slate-500 hover:text-upsc-navy hover:bg-slate-100;
   }
+
   .sidebar-item:hover {
-    background-color: rgba(43, 57, 144, 0.2); /* upsc-navy with 20% opacity */
+    background-color: rgba(43, 57, 144, 0.2);
+    /* upsc-navy with 20% opacity */
   }
-  
+
   .sidebar-item.active {
-    @apply bg-upsc-navy text-white font-medium shadow-lg;
-    box-shadow: 0 10px 15px -3px rgba(43, 57, 144, 0.2), 0 4px 6px -2px rgba(43, 57, 144, 0.1);
+    @apply bg-upsc-navy text-white font-medium shadow-md;
+    box-shadow: 0 4px 12px rgba(43, 57, 144, 0.15);
   }
 
   .btn-primary {
@@ -51,23 +56,23 @@ body {
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #e2e8f0;
     border-radius: 10px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #cbd5e1;
   }
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-upsc-gold to-white;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-upsc-navy to-upsc-gold;
 }
 
 .shimmer {
@@ -77,8 +82,13 @@ body {
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Animations */
@@ -87,6 +97,13 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

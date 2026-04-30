@@ -10,7 +10,7 @@ import { useApp } from '../context/AppContext';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const Home = () => {
-  const { activeTab, isLoginModalOpen, setIsLoginModalOpen, setIsLoggedIn } = useApp();
+  const { activeTab, isLoginModalOpen, setIsLoginModalOpen } = useApp();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -26,7 +26,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-upsc-dark">
+    <div className="flex min-h-screen bg-[var(--bg-dark)]">
       {/* Fixed Left Sidebar */}
       <Sidebar />
 
@@ -50,13 +50,7 @@ const Home = () => {
       <RightSidebar />
 
       {/* Global Modals */}
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={() => {
-          setIsLoggedIn(true);
-          setIsLoginModalOpen(false);
-        }} 
-      />
+      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </div>
   );
 };

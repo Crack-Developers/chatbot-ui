@@ -8,9 +8,12 @@ export const dummyQuestions = [
 ];
 
 export const dummyNews = [
-  { id: 1, title: "Supreme Court's view on Privacy", summary: "The SC recently discussed the implications of digital privacy in the modern era and its impact on fundamental rights.", tag: "Polity", date: "21 April 2026" },
-  { id: 2, title: "RBI's New Monetary Policy", summary: "RBI keeps rates unchanged to manage inflation while supporting recovery amidst global economic shifts.", tag: "Economy", date: "20 April 2026" },
-  { id: 3, title: "India-France Defense Cooperation", summary: "New bilateral agreements signed to enhance maritime security and technical cooperation in the Indo-Pacific.", tag: "IR", date: "19 April 2026" },
+  { id: 1, title: "Supreme Court's view on Privacy", summary: "The SC recently discussed the implications of digital privacy in the modern era and its impact on fundamental rights.", tag: "Polity", date: "2026-04-21" },
+  { id: 2, title: "RBI's New Monetary Policy", summary: "RBI keeps rates unchanged to manage inflation while supporting recovery amidst global economic shifts.", tag: "Economy", date: "2026-04-20" },
+  { id: 3, title: "India-France Defense Cooperation", summary: "New bilateral agreements signed to enhance maritime security and technical cooperation in the Indo-Pacific.", tag: "IR", date: "2026-04-19" },
+  { id: 4, title: "G7 Summit Highlights", summary: "Global leaders discuss climate change initiatives and economic resilience in the face of supply chain disruptions.", tag: "International", date: "2026-04-21" },
+  { id: 5, title: "Digital Rupee Expansion", summary: "The government announces the next phase of the Central Bank Digital Currency (CBDC) pilot program.", tag: "Economy", date: "2026-04-22" },
+  { id: 6, title: "Climate Action Report 2026", summary: "New data shows a shift in renewable energy adoption across emerging economies, with India leading in solar capacity.", tag: "Environment", date: "2026-04-23" },
 ];
 
 export const dummyMCQs = [

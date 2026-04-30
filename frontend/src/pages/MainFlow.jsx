@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Lock, CheckCircle2, ChevronRight, MessageSquare, BookOpen, Newspaper, Star, Loader2, ArrowRight } from 'lucide-react';
+import { Send, Lock, CheckCircle2, ChevronRight, MessageSquare, BookOpen, Newspaper, Star, Loader2, ArrowRight, ChevronLeft, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import Logo from '../components/Logo';
 import { useApp } from '../context/AppContext';
 import { Trash2 } from 'lucide-react';
@@ -35,6 +35,7 @@ const MainFlow = () => {
   const [dashboardMode, setDashboardMode] = useState('prelims');
   const [showTooltip, setShowTooltip] = useState(true);
   const [activeView, setActiveView] = useState('chat'); // chat, notes, news
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
   const { notes, deleteNote } = useApp();
 
@@ -68,7 +69,9 @@ const MainFlow = () => {
   /* --- Handlers --- */
   const handleIdentitySubmit = (e) => {
     e.preventDefault();
-    setStep(2);
+    if (identityData.phone.length === 10) {
+      setStep(2);
+    }
   };
 
   const handleOtpChange = (index, value) => {
@@ -150,8 +153,24 @@ const MainFlow = () => {
               <input ref={firstNameRef} type="text" placeholder="First Name" required value={identityData.firstName} onChange={e => setIdentityData({...identityData, firstName: e.target.value})} />
               <input type="text" placeholder="Last Name" required value={identityData.lastName} onChange={e => setIdentityData({...identityData, lastName: e.target.value})} />
               <input type="email" placeholder="Email Address" required value={identityData.email} onChange={e => setIdentityData({...identityData, email: e.target.value})} />
-              <input type="tel" placeholder="Phone Number" required value={identityData.phone} onChange={e => setIdentityData({...identityData, phone: e.target.value})} />
-              <button type="submit" className="btn-primary mt-4">Continue <ArrowRight size={18} /></button>
+              <input 
+                type="tel" 
+                placeholder="Phone Number" 
+                required 
+                value={identityData.phone} 
+                onChange={e => {
+                  const val = e.target.value.replace(/\D/g, '');
+                  if (val.length <= 10) setIdentityData({...identityData, phone: val});
+                }} 
+                maxLength={10}
+              />
+              <button 
+                type="submit" 
+                className="btn-primary mt-4" 
+                disabled={identityData.phone.length !== 10}
+              >
+                Continue <ArrowRight size={18} />
+              </button>
             </form>
           </div>
         </div>
@@ -229,7 +248,7 @@ const MainFlow = () => {
       {(step === 4 || step === 5) && (
         <div className="step-container chat-layout fade-in">
           <header className="chat-header">
-            <div className="brand text-upsc-navy dark:text-white"><Logo showText={false} className="h-8 w-auto" /> <span className="ml-2">Selva's AI</span></div>
+            <div className="brand text-upsc-navy"><Logo showText={false} className="h-8 w-auto" /> <span className="ml-2 font-bold">Selva's AI</span></div>
             <div className="queries-badge">{3 - queriesUsed} Free Questions Remaining</div>
           </header>
 
@@ -331,11 +350,15 @@ const MainFlow = () => {
       {step === 7 && (
         <div className="step-container dashboard-layout fade-in">
            {/* Sidebar */}
-           <aside className="dash-sidebar">
-              <div className="brand flex flex-col items-start gap-2">
-                <Logo showText={false} className="h-10 w-auto" />
-                <span className="text-sm font-bold text-upsc-navy dark:text-white">SELVA'S AI PRO</span>
-              </div>
+            <aside className={`dash-sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+               <div 
+                 onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                 className="brand flex flex-col items-start gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                 title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+               >
+                 <Logo showText={false} className="h-10 w-auto" />
+                 <span className="text-sm font-bold text-upsc-navy">{isSidebarCollapsed ? '' : "SELVA'S AI PRO"}</span>
+               </div>
               <nav className="nav-links mt-6">
                 <a href="#" className={activeView === 'chat' ? 'active' : ''} onClick={(e) => { e.preventDefault(); setActiveView('chat'); }}><MessageSquare size={18}/> <span>New Chat</span></a>
                 <div className="subtext xs mt-4 mb-2 px-3" style={{color: 'var(--text-muted)'}}>RECENT CHATS</div>
@@ -349,22 +372,22 @@ const MainFlow = () => {
               <div className="user-profile mt-auto">
                 <div className="avatar">{identityData.firstName ? identityData.firstName[0] : 'U'}</div>
                 <div className="info">
-                  <span className="name text-upsc-navy dark:text-white">{identityData.firstName || 'User'}</span>
+                  <span className="name text-upsc-navy">{identityData.firstName || 'User'}</span>
                   <span className="plan">Pro Member</span>
                 </div>
               </div>
            </aside>
 
            {/* Main Content */}
-           <main className="dash-main">
+           <main className={`dash-main ${isSidebarCollapsed ? 'expanded' : ''}`}>
               <header className="dash-header">
                 <div className="mode-toggle-group">
-                   <button className={`mode-btn ${dashboardMode === 'prelims' ? 'active' : ''}`} onClick={() => setDashboardMode('prelims')}>Prelims Mode</button>
-                   <button className={`mode-btn ${dashboardMode === 'mains' ? 'active' : ''}`} onClick={() => setDashboardMode('mains')}>Mains Mode</button>
+                   <button className={`mode-btn ${specialization === 'History' ? 'active' : ''}`} onClick={() => setSpecialization('History')}>History</button>
+                   <button className={`mode-btn ${specialization === 'Anthropology' ? 'active' : ''}`} onClick={() => setSpecialization('Anthropology')}>Anthropology</button>
                    {showTooltip && (
                      <div className="mode-tooltip">
                        <div className="tooltip-arrow"></div>
-                       Switch modes based on exam type
+                       Switch between your subjects
                      </div>
                    )}
                 </div>
@@ -396,7 +419,7 @@ const MainFlow = () => {
                   
                   <div className="dash-footer">
                     <div className="input-group">
-                      <input type="text" placeholder={`Ask your ${dashboardMode} doubt...`} />
+                      <input type="text" placeholder={`Ask your ${specialization} doubt...`} />
                       <button className="btn-icon"><Send size={20}/></button>
                     </div>
                   </div>
