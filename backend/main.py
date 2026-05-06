@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import chat, generate
+from routers import chat, generate, news
 import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -18,6 +18,7 @@ app.add_middleware(
 
 app.include_router(chat.router, prefix="/api/v1")
 app.include_router(generate.router, prefix="/api/v1")
+app.include_router(news.router, prefix="/api/v1")
 
 @app.get("/health")
 def health_check():

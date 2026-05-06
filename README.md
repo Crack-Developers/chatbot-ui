@@ -3,7 +3,7 @@
 A premium, modern AI-powered platform designed specifically for UPSC aspirants. This application provides tools for MCQ practice, daily news analysis, and direct interaction with an AI mentor tailored for the Civil Services Examination.
 
 ## 🚀 Live Demo
-**[Click here to access the Live Application](https://chatbot-ui-five.vercel.app/)**
+**[Click here to access the Local Application](http://localhost:5173/)**
 
 ## ✨ Features
 - **OTP-Based Authentication**: Secure login using phone numbers and OTP verification.
@@ -47,6 +47,15 @@ A premium, modern AI-powered platform designed specifically for UPSC aspirants. 
    ```bash
    python main.py
    ```
+
+### Data Pipeline (Automation)
+The daily news analysis is automated via a dedicated scraper pipeline.
+1. Run the scraper manually or as a background service:
+   ```bash
+   python pipeline/daily_news_scraper.py
+   ```
+2. The script will automatically fetch data from *The Hindu* and *PIB* every day at **06:00 AM**.
+3. It updates both **MongoDB** and a local **JSON file** (`backend/data/daily_news.json`) for frontend synchronization.
 
 ## 📄 License
 This project is licensed under the MIT License.
