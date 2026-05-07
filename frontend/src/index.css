@@ -91,6 +91,10 @@ body {
   }
 }
 
+/* Hide scrollbar but allow scroll */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Animations */
 .fade-in {
   animation: fadeIn 0.5s ease-out forwards;
