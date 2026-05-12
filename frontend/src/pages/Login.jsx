@@ -84,8 +84,10 @@ const Login = () => {
           className="login-box"
         >
           <div className="login-header">
-            <Logo showText={true} />
-            <p>{step === 1 ? 'Verify your identity to continue' : 'Secure Verification'}</p>
+            <div className="flex justify-center mb-2 transform scale-90 md:scale-100">
+              <Logo showText={true} />
+            </div>
+            <p className="font-medium text-slate-500">{step === 1 ? 'Verify your identity to continue' : 'Secure Verification'}</p>
           </div>
 
           {step === 1 ? (

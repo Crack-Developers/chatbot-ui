@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 router = APIRouter()
-JSON_DB_PATH = "data/daily_news.json"
+# Resolve absolute path so it works regardless of the working directory
+JSON_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "daily_news.json")
 RETENTION_DAYS = 5
 
 
@@ -56,6 +57,35 @@ async def get_all_news(
 
     articles.sort(key=lambda x: (x.get("date", ""), x.get("priority") == "high"), reverse=True)
     return {"articles": articles, "total": len(articles)}
+
+
+# ─── GET full day data (overview + articles + categories) ─────────────────────
+@router.get("/daily-news/day/{date}")
+async def get_day_data(date: str):
+    db = _load_db()
+    if date not in db:
+        raise HTTPException(404, f"No data found for {date}")
+    day = db[date]
+    # Normalize articles: handle both 'headline' (old) and 'title' (new) fields
+    articles = []
+    for a in day.get("articles", []):
+        articles.append({
+            **a,
+            "title": a.get("title") or a.get("headline") or "Untitled",
+            "tag": a.get("tag") or a.get("category") or "Polity",
+            "summary": a.get("summary") or (a.get("analysis") or {}).get("summary") or "",
+            "isImportant": a.get("isImportant") or a.get("is_most_important") or False,
+        })
+    return {
+        "date": date,
+        "title": day.get("title", f"UPSC Daily Briefing — {date}"),
+        "overview": day.get("overview", ""),
+        "categories": day.get("categories", {}),
+        "source": day.get("source", "The Hindu + PIB"),
+        "last_updated": day.get("last_updated", ""),
+        "articles": articles,
+        "total": len(articles),
+    }
 
 
 # ─── GET analysis for a specific date ────────────────────────────────────────

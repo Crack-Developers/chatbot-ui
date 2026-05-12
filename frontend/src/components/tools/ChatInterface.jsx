@@ -59,7 +59,7 @@ const ChatInterface = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-2rem)] m-4 shadow-2xl bg-[var(--bg-card)] h-full relative overflow-hidden rounded-3xl border border-[var(--border-color)] transition-colors duration-300">
+    <div className="flex flex-col md:h-[calc(100vh-2rem)] md:m-4 shadow-2xl bg-[var(--bg-card)] h-full min-h-screen md:min-h-0 relative overflow-hidden md:rounded-3xl border border-[var(--border-color)] transition-colors duration-300">
       {/* Chat Header */}
       <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)] bg-[var(--bg-card)]/80 backdrop-blur-md sticky top-0 z-10 transition-colors duration-300">
         <div className="flex items-center gap-3">

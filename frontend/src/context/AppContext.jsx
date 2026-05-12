@@ -48,6 +48,12 @@ export const AppProvider = ({ children }) => {
     setNotes(notes.filter(note => note.id !== id));
   };
 
+  const updateNote = (id, newText) => {
+    setNotes(notes.map(note => 
+      note.id === id ? { ...note, text: newText, lastModified: new Date().toLocaleDateString() } : note
+    ));
+  };
+
   const addChatMessage = (message) => {
     setChatHistory(prev => [...prev, message]);
   };
@@ -60,7 +66,7 @@ export const AppProvider = ({ children }) => {
       chatHistory, setChatHistory, addChatMessage,
       selectedSubject, setSelectedSubject,
       chatInput, setChatInput,
-      notes, addNote, deleteNote,
+      notes, addNote, deleteNote, updateNote,
       isLoginModalOpen, setIsLoginModalOpen,
       isSidebarCollapsed, setIsSidebarCollapsed,
       user, setUser, isLoggedIn, login, logout

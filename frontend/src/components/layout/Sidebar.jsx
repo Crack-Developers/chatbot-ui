@@ -23,13 +23,7 @@ const Sidebar = () => {
         className={`flex items-center gap-3 mb-10 px-2 cursor-pointer hover:opacity-80 transition-all duration-300 ${isSidebarCollapsed ? 'justify-center' : 'justify-center'}`}
         title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
       >
-        <Logo showText={false} className={`${isSidebarCollapsed ? 'h-8' : 'h-12'} w-auto transition-all duration-300`} />
-        {!isSidebarCollapsed && (
-          <div className="flex flex-col fade-in">
-            <span className="text-xl font-bold tracking-tight text-upsc-navy">SELVA'S</span>
-            <span className="text-xs uppercase tracking-widest text-upsc-gold font-bold">IAS ACADEMY</span>
-          </div>
-        )}
+        <Logo showText={!isSidebarCollapsed} className={`${isSidebarCollapsed ? 'h-8' : 'h-12'} w-auto transition-all duration-300`} />
       </div>
 
       <div className="flex-1 space-y-2 mt-4">

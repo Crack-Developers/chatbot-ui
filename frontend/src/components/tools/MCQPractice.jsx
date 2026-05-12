@@ -86,7 +86,7 @@ const MCQPractice = () => {
 
   if (phase === 'setup') {
     return (
-      <div className="p-8 max-w-4xl mx-auto pb-20">
+      <div className="p-4 md:p-8 max-w-4xl mx-auto pb-32 md:pb-20">
         <div className="mb-10">
           <h2 className="text-3xl font-black text-[var(--text-main)] flex items-center gap-3 mb-2">
             <Settings className="text-upsc-gold" /> Practice Setup
@@ -184,7 +184,7 @@ const MCQPractice = () => {
     const isAnswered = answers[currentIdx] !== undefined;
 
     return (
-      <div className="p-8 max-w-4xl mx-auto pb-20">
+      <div className="p-4 md:p-8 max-w-4xl mx-auto pb-32 md:pb-20">
         <div className="flex justify-between items-center mb-10">
           <div>
             <h2 className="text-2xl font-black text-[var(--text-main)]">MCQ Practice</h2>

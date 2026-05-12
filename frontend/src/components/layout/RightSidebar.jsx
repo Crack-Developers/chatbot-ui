@@ -4,15 +4,30 @@ import { useApp } from '../../context/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NotesPanel = () => {
-  const { notes, addNote, deleteNote } = useApp();
+  const { notes, addNote, deleteNote, updateNote } = useApp();
   const [newNote, setNewNote] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState('');
 
   const handleAdd = () => {
     if (newNote.trim()) {
       addNote(newNote);
       setNewNote('');
       setIsAdding(false);
+    }
+  };
+
+  const handleUpdate = (id) => {
+    if (editText.trim()) {
+      updateNote(id, editText);
+      setEditingId(null);
+    }
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Do you want to delete this note?')) {
+      deleteNote(id);
     }
   };
 
@@ -71,15 +86,45 @@ const NotesPanel = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="p-4 bg-[var(--bg-dark)] border border-[var(--border-color)] rounded-2xl group relative transition-colors"
           >
-            <button 
-              onClick={() => deleteNote(note.id)}
-              className="absolute top-3 right-3 p-1.5 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
-              title="Delete Note"
-            >
-              <Trash2 size={16} />
-            </button>
-            <p className="text-sm text-[var(--text-main)] whitespace-pre-wrap leading-relaxed">{note.text}</p>
-            <div className="mt-3 text-[10px] text-gray-400 font-medium">Saved on {note.date}</div>
+            <div className="absolute top-3 right-3 flex gap-1">
+              <button 
+                onClick={() => {
+                  setEditingId(note.id);
+                  setEditText(note.text);
+                }}
+                className="p-1.5 text-gray-500 hover:text-upsc-navy hover:bg-upsc-navy/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                title="Edit Note"
+              >
+                <Edit3 size={14} />
+              </button>
+              <button 
+                onClick={() => handleDelete(note.id)}
+                className="p-1.5 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                title="Delete Note"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
+
+            {editingId === note.id ? (
+              <div className="pt-2">
+                <textarea
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  className="w-full bg-white/50 border border-upsc-navy/20 rounded-xl p-3 text-sm mb-2 focus:outline-none focus:border-upsc-navy/50 h-24"
+                  autoFocus
+                />
+                <div className="flex justify-end gap-2">
+                  <button onClick={() => setEditingId(null)} className="px-3 py-1 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Cancel</button>
+                  <button onClick={() => handleUpdate(note.id)} className="px-4 py-1 text-[10px] font-bold bg-upsc-navy text-white rounded-lg uppercase tracking-widest">Save</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className="text-sm text-[var(--text-main)] whitespace-pre-wrap leading-relaxed pr-8">{note.text}</p>
+                <div className="mt-3 text-[10px] text-gray-400 font-medium">Saved on {note.date}</div>
+              </>
+            )}
           </motion.div>
         ))}
       </div>

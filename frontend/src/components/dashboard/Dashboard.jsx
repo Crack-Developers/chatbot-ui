@@ -26,7 +26,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto pb-32 md:pb-8">
       {/* Header Tabs */}
       <div className="flex items-center gap-8 mb-12 border-b border-upsc-navy/30">
         {['Questions', 'Languages', 'Exams'].map((tab, idx) => (

@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [PIPELINE] %(message
 log = logging.getLogger(__name__)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 JSON_DB_PATH = os.path.join(os.path.dirname(__file__), "..", "backend", "data", "daily_news.json")
 RETENTION_DAYS = 5
 
@@ -100,7 +101,15 @@ def _scrape_article(url: str, source: str) -> dict | None:
         title = title.get_text(strip=True)
         if len(title) < 10:
             return None
-        paragraphs = [p.get_text(strip=True) for p in soup.find_all("p") if len(p.get_text(strip=True)) > 40]
+        blocked_phrases = [
+            "subscribed with another email", "account subscription benefits", 
+            "premium stories", "unlock these with subscription", "view from india",
+            "first day first show", "today's cache", "download of the top 5"
+        ]
+        paragraphs = [
+            p.get_text(strip=True) for p in soup.find_all("p") 
+            if len(p.get_text(strip=True)) > 40 and not any(bp in p.get_text(strip=True).lower() for bp in blocked_phrases)
+        ]
         content = " ".join(paragraphs[:12])
         return {"title": title, "content": content[:3000], "url": url, "source": source}
     except Exception:
@@ -110,15 +119,15 @@ def _scrape_article(url: str, source: str) -> dict | None:
 # ─── AI Analysis ─────────────────────────────────────────────────────────────
 
 def _ai_analyze(articles: list, date: str) -> dict | None:
-    if not OPENAI_API_KEY:
-        log.warning("No OPENAI_API_KEY — using fallback categorization")
+    if not GEMINI_API_KEY and not OPENAI_API_KEY:
+        log.warning("No API KEY found (Gemini/OpenAI) — using fallback categorization")
         return _fallback_analyze(articles, date)
 
     prompt = f"""You are a UPSC Current Affairs Expert. Analyze these news articles for {date}.
 
 Articles: {json.dumps(articles, ensure_ascii=False)[:8000]}
 
-Return ONLY valid JSON in EXACTLY this structure:
+Return ONLY valid JSON in EXACTLY this structure without any markdown formatting:
 {{
   "overview": "5-6 sentence summary of all key themes today",
   "articles": [
@@ -154,18 +163,32 @@ Rules:
 - Mark isImportant=true for articles with very high exam probability
 - priority=high only for exam-critical topics
 - syllabusLinks must reference actual GS Papers
-- mainsAnswer must follow UPSC answer writing format"""
+- mainsAnswer must follow UPSC answer writing format
+- If an article's content is short or missing (e.g., due to a paywall), DO NOT say "content missing". Instead, use the TITLE to identify the core topic and use your own extensive knowledge to generate the summary, whyImportant, prelimsQuestions, and mainsAnswer."""
 
     try:
-        import openai
-        client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"},
-            temperature=0.3,
-        )
-        return json.loads(resp.choices[0].message.content)
+        if GEMINI_API_KEY:
+            from google import genai
+            from google.genai import types
+            client = genai.Client(api_key=GEMINI_API_KEY)
+            resp = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                ),
+            )
+            return json.loads(resp.text, strict=False)
+        elif OPENAI_API_KEY:
+            import openai
+            client = openai.OpenAI(api_key=OPENAI_API_KEY)
+            resp = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}],
+                response_format={"type": "json_object"},
+                temperature=0.3,
+            )
+            return json.loads(resp.choices[0].message.content)
     except Exception as e:
         log.error(f"AI analysis failed: {e}")
         return _fallback_analyze(articles, date)
@@ -246,11 +269,12 @@ def run_pipeline(target_date: str = None) -> str:
     log.info(f"Fetched {len(raw_articles)} raw articles")
 
     # Deduplicate
-    seen_titles = {a["id"] for a in db.get(date, {}).get("articles", [])}
+    seen_ids = set(existing_ids)
     new_articles = []
     for art in raw_articles:
         aid = _article_id(art["title"], date)
-        if aid not in existing_ids:
+        if aid not in seen_ids:
+            seen_ids.add(aid)
             art["id_hash"] = aid
             new_articles.append(art)
     log.info(f"{len(new_articles)} new articles after deduplication")
